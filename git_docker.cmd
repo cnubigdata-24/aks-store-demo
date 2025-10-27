@@ -1,5 +1,5 @@
 # 1. clone and build the aks sample code
-#-------------------------------------------------------------
+-------------------------------------------------------------
 git clone https://github.com/Azure-Samples/aks-store-demo.git .
 
 docker compose -f docker-compose-quickstart.yml up -d
@@ -11,8 +11,9 @@ docker ps
 
 docker compose down
 
+
 # 2. push docker images to the azure conatainer registry
-#-------------------------------------------------------------
+-------------------------------------------------------------
 az acr login --name $ACRNAME
 
 docker tag aks_test-product-service:latest $ACRNAME.azurecr.io/aks-store-demo/product-service:latest
@@ -23,8 +24,9 @@ docker push $ACRNAME.azurecr.io/aks-store-demo/product-service:latest
 docker push $ACRNAME.azurecr.io/aks-store-demo/order-service:latest
 docker push $ACRNAME.azurecr.io/aks-store-demo/store-front:latest
 
+
 # 3. push docker images to the azure conatainer registry
-#-------------------------------------------------------------
+-------------------------------------------------------------
 # Install the Kubernetes CLI
 az aks install-cli
 
@@ -34,3 +36,17 @@ az aks get-credentials --resource-group <Resource Group Name> --name <AKS Cluste
 # Verify connection
 kubectl get nodes
 kubectl get pods
+
+
+# 4. AKS HPA Autoscaling
+-------------------------------------------------------------
+# Set HPA Autoscaling
+kubectl autoscale deployment store-front --cpu-percent=70 --min=1 --max=10
+kubectl get pods
+kubectl get hpa -w
+
+# Remove HPA Autoscaling and set replicas=1
+kubectl delete hpa store-front
+kubectl scale deployment store-front --replicas=1
+
+
