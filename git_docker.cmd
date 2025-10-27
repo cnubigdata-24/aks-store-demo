@@ -1,4 +1,5 @@
-# clone and build the aks sample code
+# 1. clone and build the aks sample code
+#-------------------------------------------------------------
 git clone https://github.com/Azure-Samples/aks-store-demo.git .
 
 docker compose -f docker-compose-quickstart.yml up -d
@@ -10,8 +11,8 @@ docker ps
 
 docker compose down
 
-
-# push docker images to the azure conatainer registry
+# 2. push docker images to the azure conatainer registry
+#-------------------------------------------------------------
 az acr login --name $ACRNAME
 
 docker tag aks_test-product-service:latest $ACRNAME.azurecr.io/aks-store-demo/product-service:latest
@@ -22,4 +23,14 @@ docker push $ACRNAME.azurecr.io/aks-store-demo/product-service:latest
 docker push $ACRNAME.azurecr.io/aks-store-demo/order-service:latest
 docker push $ACRNAME.azurecr.io/aks-store-demo/store-front:latest
 
+# 3. push docker images to the azure conatainer registry
+#-------------------------------------------------------------
+# Install the Kubernetes CLI
+az aks install-cli
 
+# Configiure kubectl to connect the K8s Cluster
+az aks get-credentials --resource-group myResourceGroup --name myAKSCluster
+
+# Verify connection
+kubectl get nodes
+kubectl get pods
