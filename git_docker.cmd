@@ -29,7 +29,7 @@ docker push $ACRNAME.azurecr.io/aks-store-demo/store-front:latest
 az aks install-cli
 
 # Configiure kubectl to connect the K8s Cluster
-az aks get-credentials --resource-group myResourceGroup --name myAKSCluster
+az aks get-credentials --resource-group <Resource Group Name> --name <AKS Cluster Name>
 
 # Verify connection
 kubectl get nodes
